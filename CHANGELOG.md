@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This CHANGELOG follows the format listed [here](https://github.com/sensu-plugins/community/blob/master/HOW_WE_CHANGELOG.md)
 
 ## [Unreleased]
+### Fixed
+- Fix for JSON.parse in metrics checks commands that inheret from Sensu::Plugin::Metric::CLI::JSON:Class
 
 ## [2.0.0] - 2018-03-31
 ### Breaking Changes
