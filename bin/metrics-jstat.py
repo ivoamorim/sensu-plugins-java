@@ -136,6 +136,12 @@ class JstatMetricsToGraphiteFormat(object):
       help    = 'Metric naming scheme, text to prepend to metric',
       metavar = 'SERVICE')
 
+    parser.add_option('--sudo',
+      default = None,
+      dest    = 'sudo',
+      help    = 'run jps and jstat with the security privileges of another user',
+      metavar = 'SUDO')
+
     (options, args) = parser.parse_args()
 
     if not options.java_app_name:
@@ -220,7 +226,10 @@ class JstatMetricsToGraphiteFormat(object):
 
       # Get stats from jstat stdout
       try :
-        jstat_gc_out = check_output(["jstat", jstat_option, lvmid])
+        cmd_list = ["jstat", jstat_option, lvmid]
+        if options.sudo:
+          cmd_list = ['sudo', '-u', options.sudo] + cmd_list
+        jstat_gc_out = check_output(cmd_list)
       except Exception as e:
         if options.debug:
           print e
@@ -244,7 +253,10 @@ class JstatMetricsToGraphiteFormat(object):
 
     # Get lvmid (JVM id)
     try :
-      jps_out = check_output(["jps", "-v"])
+      cmd_list = ["jps", "-v"]
+        if options.sudo:
+          cmd_list = ['sudo', '-u', options.sudo] + cmd_list
+      jps_out = check_output(cmd_list)
     except Exception as e:
       if options.debug:
         print e
